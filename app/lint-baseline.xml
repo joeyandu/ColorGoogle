@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<issues format="6" by="lint 8.13.2" type="baseline" client="gradle" dependencies="false" name="AGP (8.13.2)" variant="all" version="8.13.2">
+  <issue id="GestureBackNavigation" message="`onBackPressed` is no longer called for back gestures; migrate to AndroidX's backward compatible `OnBackPressedDispatcher`" errorLine1="    public void onBackPressed() {" errorLine2="                ~~~~~~~~~~~~~">
+    <location file="src/main/java/dev/evoker/homeholdcts/MainActivity.java" line="464" column="17" />
+  </issue>
+  <issue id="StartActivityAndCollapseDeprecated" message="TileService#startActivityAndCollapse(Intent) is deprecated. Use TileService#startActivityAndCollapse(PendingIntent) instead." errorLine1="                startActivityAndCollapse(bridge);" errorLine2="                                         ~~~~~~">
+    <location file="src/main/java/dev/evoker/homeholdcts/LogSessionRecoveryTileService.java" line="179" column="42" />
+  </issue>
+  <issue id="WrongConstant" message="Must be one or more of: MediaCodec.BUFFER_FLAG_SYNC_FRAME, MediaCodec.BUFFER_FLAG_KEY_FRAME, MediaCodec.BUFFER_FLAG_CODEC_CONFIG, MediaCodec.BUFFER_FLAG_END_OF_STREAM, MediaCodec.BUFFER_FLAG_PARTIAL_FRAME, MediaCodec.BUFFER_FLAG_DECODE_ONLY, but could be MediaExtractor.SAMPLE_FLAG_SYNC, MediaExtractor.SAMPLE_FLAG_ENCRYPTED, MediaExtractor.SAMPLE_FLAG_PARTIAL_FRAME" errorLine1="                info.flags =  extractor.getSampleFlags();" errorLine2="                              ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+    <location file="src/main/java/dev/evoker/homeholdcts/ActivationSoundPlayer.java" line="191" column="31" />
+  </issue>
+  <issue id="WrongConstant" message="Must be one or more of: Intent.FLAG_GRANT_READ_URI_PERMISSION, Intent.FLAG_GRANT_WRITE_URI_PERMISSION" errorLine1="            getContentResolver().takePersistableUriPermission(uri, takeFlags);" errorLine2="                                                                   ~~~~~~~~~">
+    <location file="src/main/java/dev/evoker/homeholdcts/MainActivity.java" line="434" column="68" />
+  </issue>
+  <issue id="WrongConstant" message="Must be one of: LineBreaker.BREAK_STRATEGY_SIMPLE, LineBreaker.BREAK_STRATEGY_HIGH_QUALITY, LineBreaker.BREAK_STRATEGY_BALANCED" errorLine1="            t.setBreakStrategy(android.text.Layout.BREAK_STRATEGY_HIGH_QUALITY);" errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+    <location file="src/main/java/dev/evoker/homeholdcts/MainActivity.java" line="3940" column="32" />
+  </issue>
+  <issue id="ForegroundServicePermission" message="foregroundServiceType:systemExempted requires permission:[android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED] AND any permission in list:[android.permission.SCHEDULE_EXACT_ALARM, android.permission.USE_EXACT_ALARM]" errorLine1="        &lt;service" errorLine2="        ^">
+    <location file="src/main/AndroidManifest.xml" line="56" column="9" />
+  </issue>
+</issues>

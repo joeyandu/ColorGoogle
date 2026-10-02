@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="m3_primary">#B9C3FF</color>
+    <color name="m3_on_primary">#08238F</color>
+    <color name="m3_primary_container">#263EAF</color>
+    <color name="m3_on_primary_container">#DEE1FF</color>
+    <color name="m3_surface">#111318</color>
+    <color name="m3_surface_container">#1D1F24</color>
+    <color name="m3_surface_container_high">#27292F</color>
+    <color name="m3_on_surface">#E3E2E9</color>
+    <color name="m3_on_surface_variant">#C7C5D0</color>
+    <color name="m3_outline">#918F9A</color>
+    <color name="m3_success">#6EDBAA</color>
+    <color name="m3_warning">#FFB95F</color>
+    <color name="m3_error">#FFB4AB</color>
+</resources>

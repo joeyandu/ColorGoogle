@@ -1,0 +1,37 @@
+
+# Android/local signing secrets
+keystore.properties
+*.jks
+*.keystore
+!keystore.properties.example
+release/private/
+release/*.apk
+release/*.zip
+release/*.log
+release/*.sha256
+
+# Codex attachments, terminal links, and distributable archives are not source.
+.codex-remote-attachments/
+result
+*.zip
+
+# Gradle files
+.gradle/
+build/
+
+# IDEA files
+.idea/
+*.iml
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Private device diagnostics and local publication outputs
+/delivery/
+/release/
+*.apk
+*.apks
+*.aab
+*.log
+.DS_Store
+__pycache__/

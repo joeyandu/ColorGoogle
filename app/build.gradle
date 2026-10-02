@@ -1,0 +1,172 @@
+plugins {
+    id 'com.android.application'
+}
+
+/*
+ * MindTrigger Assist signing environment
+ *
+ * Release credentials can come from either:
+ *
+ *   1) <project>/keystore.properties
+ *
+ *      storeFile=/absolute/or/project/relative/path/release.jks
+ *      storePassword=...
+ *      keyAlias=...
+ *      keyPassword=...
+ *
+ *   2) Environment variables
+ *
+ *      MTA_KEYSTORE
+ *      MTA_STORE_PASSWORD
+ *      MTA_KEY_ALIAS
+ *      MTA_KEY_PASSWORD
+ *
+ * Private signing material is intentionally not stored in source control.
+ */
+def signingProperties = new Properties()
+def signingPropertiesFile = rootProject.file("keystore.properties")
+
+if (signingPropertiesFile.exists()) {
+    signingPropertiesFile.withInputStream {
+        signingProperties.load(it)
+    }
+}
+
+def signingValue = { String propertyName, String environmentName ->
+    def value = signingProperties.getProperty(propertyName)
+
+    if (value == null || value.trim().isEmpty()) {
+        value = System.getenv(environmentName)
+    }
+
+    return value
+}
+
+def releaseStoreFile = signingValue("storeFile", "MTA_KEYSTORE")
+def releaseStorePassword = signingValue("storePassword", "MTA_STORE_PASSWORD")
+def releaseKeyAlias = signingValue("keyAlias", "MTA_KEY_ALIAS")
+def releaseKeyPassword = signingValue("keyPassword", "MTA_KEY_PASSWORD")
+
+def hasReleaseSigning =
+        releaseStoreFile != null
+        && !releaseStoreFile.trim().isEmpty()
+        && releaseStorePassword != null
+        && !releaseStorePassword.trim().isEmpty()
+        && releaseKeyAlias != null
+        && !releaseKeyAlias.trim().isEmpty()
+        && releaseKeyPassword != null
+        && !releaseKeyPassword.trim().isEmpty()
+
+def releaseTaskRequested =
+        gradle.startParameter.taskNames.any {
+            it.toLowerCase().contains("release")
+        }
+
+if (releaseTaskRequested && !hasReleaseSigning) {
+    throw new GradleException(
+            """
+Release signing is required.
+
+MindTrigger Assist does not emit an unsigned release APK.
+
+Create <project>/keystore.properties from keystore.properties.example
+or provide these environment variables:
+
+  MTA_KEYSTORE
+  MTA_STORE_PASSWORD
+  MTA_KEY_ALIAS
+  MTA_KEY_PASSWORD
+
+The configured APK signing schemes are:
+  v1 = enabled
+  v2 = enabled
+  v3 = enabled
+  v4 = disabled
+""".stripIndent())
+}
+
+android {
+    // Only six verified upstream v16.2.0 errors; new errors still fail the build.
+    lint { baseline = file("lint-baseline.xml") }
+    namespace 'dev.evoker.homeholdcts'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "dev.evoker.homeholdcts"
+        minSdk 32
+        targetSdk 36
+
+        versionCode 16030000
+        versionName "16.3.0"
+    }
+
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
+    buildFeatures {
+        buildConfig = true
+        aidl = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    signingConfigs {
+        /*
+         * minSdk 32 devices support APK Signature Scheme v3.  Keeping the
+         * legacy v1/v2 blocks out avoids redundant signature payloads.
+         */
+        debug {
+            enableV1Signing = false
+            enableV2Signing = false
+            enableV3Signing = true
+            enableV4Signing = false
+        }
+
+        release {
+            enableV1Signing = false
+            enableV2Signing = false
+            enableV3Signing = true
+            enableV4Signing = false
+
+            if (hasReleaseSigning) {
+                storeFile rootProject.file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            minifyEnabled false
+            shrinkResources false
+
+            /*
+             * A release build is never intentionally left unsigned.
+             * Missing credentials are rejected above.
+             */
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    implementation project(':adbclient')
+    implementation 'org.bouncycastle:bcpkix-jdk15to18:1.81'
+    implementation 'org.conscrypt:conscrypt-android:2.5.3'
+    testImplementation "junit:junit:4.13.2"
+    implementation "com.google.android.material:material:1.14.0"
+    implementation "dev.rikka.shizuku:api:13.1.5"
+    implementation "dev.rikka.shizuku:provider:13.1.5"
+    implementation "org.lsposed.hiddenapibypass:hiddenapibypass:6.1"
+}
