@@ -56,6 +56,16 @@ ColorGoogle 是基于 **EvokerUniverse 的 [MindTrigger Assist v16.2.0](https://
 
 ## 安装：推荐使用电脑 ADB
 
+> **使用 O+Connect（OPPO 互联）的用户请注意 USB 冲突**
+>
+> 在我们实测的 Mac 和 OPPO 手机上，O+Connect 后台服务会在连接 USB 时发起 Android 附件模式切换。该过程与手机 ADB 服务重启、ColorGoogle 特权代理退出相关，导致唤醒和搜索功能失效，而应用权限仍然保留。
+>
+> 只关闭 O+Connect 窗口并不够，它的后台服务仍可能运行。停用后台服务和自动启动后，多次 USB 重连测试未再复现此问题。
+>
+> 如果遇到类似情况，请检查 O+Connect 后台服务及自启设置，待 USB 连接稳定后，通过 ADB 重新激活 ColorGoogle。停用这些服务会影响 O+Connect 的互联功能；软件更新后也应重新检查。
+>
+> **Windows 尚未实测，推测可能存在类似冲突，但目前未经证实。** 以上结论仅来自已测试的设备组合，不代表所有电脑和手机都会出现。
+
 ### 1. 准备与安装
 
 1. 从 [Release](https://github.com/joeyandu/ColorGoogle/releases/tag/v16.3.0) 下载 `ColorGoogle-16.3.0.apk`、`SHA256SUMS` 和对应源码 ZIP。源码包内含 `tools/activate-agent.sh`。
@@ -227,6 +237,7 @@ install -r 前检查签名，不能自动卸载或清除数据；冲突时解释
 
 | 现象 | 检查方法 |
 |---|---|
+| 连接 USB 后功能失效 | 检查 O+Connect 是否将手机切入 Android 附件模式。关闭窗口后后台服务仍可能运行；检查后台与自启设置，待 USB 稳定后通过 ADB 重新激活 ColorGoogle。已在测试 Mac 上观察到，Windows 尚未实测。 |
 | 所有入口都没反应 | 看 Beta 代理状态。READ_LOGS 仍可能已授权，但代理已退出；用电脑脚本重新激活。 |
 | 无线恢复不起作用 | 检查 Wi-Fi、无线调试、本机配对和主服务；它不能重新开启已关闭的无线调试。 |
 | 桌面搜索正常，长按失效 | 单独检查日志健康状态；`wakeActive=true` 后仍需实体操作验证。 |

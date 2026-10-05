@@ -56,6 +56,16 @@ ColorGoogle 16.3.0 on the tested OPPO. Desktop search and wireless recovery live
 
 ## Installation: computer ADB recommended
 
+> **O+Connect users: USB connection warning**
+>
+> On our tested Mac and OPPO phone, O+Connect’s background service initiated a switch to Android Accessory mode when USB was connected. This was associated with an ADB daemon restart and termination of ColorGoogle’s privileged agent, causing wake and search features to stop even though app permissions remained granted.
+>
+> Closing the O+Connect window was not enough: its background service remained active. After disabling its background service and automatic startup, repeated USB reconnection tests no longer reproduced the issue.
+>
+> If you encounter this problem, check O+Connect’s background services and startup settings, then reactivate ColorGoogle through ADB once the USB connection is stable. Disabling those services can affect O+Connect’s connectivity features. Recheck them after software updates.
+>
+> **Windows has not been tested. A similar conflict may be possible, but this is currently unconfirmed.** These findings apply to the tested setup, not every computer or phone.
+
 ### 1. Prepare and install
 
 1. Download `ColorGoogle-16.3.0.apk`, `SHA256SUMS` and the matching source ZIP from [Releases](https://github.com/joeyandu/ColorGoogle/releases/tag/v16.3.0). The source ZIP includes `tools/activate-agent.sh`.
@@ -223,6 +233,7 @@ and logs; report exact errors, changes, results and restoration instructions.
 
 | Symptom | Check/action |
 |---|---|
+| Features stop after connecting USB | Check whether O+Connect is switching the phone into Android Accessory mode. Closing its window may leave its background service running. Review its background/startup settings, then reactivate ColorGoogle through ADB once USB is stable. Observed on the tested Mac; Windows remains untested. |
 | All controls stopped responding | Inspect **Beta** agent status. `READ_LOGS` can still be granted while the agent is gone. Reactivate with the computer script. |
 | Wireless recovery cannot restart it | Check Wi-Fi, system wireless debugging, pairing and the main service. It cannot enable disabled wireless debugging. |
 | Search works but power/gesture does not | Check wake-log health separately from controller status; `wakeActive=true` must be followed by real trigger tests. |
